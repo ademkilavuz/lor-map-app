@@ -7,11 +7,11 @@ function initMap() {
     const location = data.location;
     const officeLatLng = { lat: location.lat, lng: location.lng };
 
-    map = new google.maps.Map(document.getElementById("map"), {
-      center: officeLatLng,
-      zoom: 16,
-      mapTypeControl: false
-    });
+  map = new google.maps.Map(document.getElementById("map"), {
+  center: { lat: -25.2744, lng: 133.7751 }, // Centre of Australia
+  zoom: 4, // Zoomed out to show all of Australia
+  mapTypeControl: false
+});
 
     const marker = new google.maps.Marker({
       position: officeLatLng,
