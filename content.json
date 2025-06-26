@@ -1,0 +1,10 @@
+{
+  "title": "Laing O'Rourke Melbourne Office Map",
+  "location": {
+    "name": "Laing O'Rourke Melbourne Office",
+    "address": "IBM Centre, 60 City Rd, Southbank VIC 3006",
+    "lat": -37.822268,
+    "lng": 144.965168,
+    "logo": "assets/lor-logo.png"
+  }
+}
