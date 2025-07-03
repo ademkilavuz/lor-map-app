@@ -36,8 +36,10 @@ body, html {
 .sidebar-menu {
   position: fixed;
   top: 60px;
-  left: -480px;
+  left: -100%;
   width: 30%;
+  min-width: 320px;
+  max-width: 600px;
   height: calc(100% - 60px);
   background: #f8f9fa;
   overflow-y: auto;
@@ -50,6 +52,7 @@ body, html {
 .sidebar-menu.open {
   left: 0;
 }
+
 
 .sidebar-menu h5 {
   font-size: 18px;
