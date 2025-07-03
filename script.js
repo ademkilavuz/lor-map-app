@@ -1,5 +1,17 @@
 let map;
-let offsetMap = {};
+
+// City coordinates used for pin placement
+const cityCoordinates = {
+  "Sydney": { lat: -33.8688, lng: 151.2093 },
+  "Melbourne": { lat: -37.8136, lng: 144.9631 },
+  "Brisbane": { lat: -27.4698, lng: 153.0251 },
+  "Perth": { lat: -31.9505, lng: 115.8605 },
+  "Adelaide": { lat: -34.9285, lng: 138.6007 },
+  "Hobart": { lat: -42.8821, lng: 147.3272 },
+  "Darwin": { lat: -12.4634, lng: 130.8456 },
+  "Canberra": { lat: -35.2809, lng: 149.1300 },
+  "Rockhampton": { lat: -23.3783, lng: 150.5100 }
+};
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -16,20 +28,14 @@ function initMap() {
       if (!grouped[item.state]) grouped[item.state] = [];
       grouped[item.state].push(item);
 
-      // Offset logic to avoid overlapping pins
-      const cityKey = `${item.city}_${item.state}`;
-      if (!offsetMap[cityKey]) offsetMap[cityKey] = 0;
-
-      const baseLat = -25 + Math.random();
-      const baseLng = 133 + Math.random();
-      const offset = offsetMap[cityKey] * 0.02;
-      offsetMap[cityKey]++;
-
-      const lat = baseLat + offset;
-      const lng = baseLng + offset;
+      // Use city coordinates or fallback
+      const coords = cityCoordinates[item.city] || {
+        lat: -25 + Math.random(),
+        lng: 133 + Math.random()
+      };
 
       const marker = new google.maps.Marker({
-        position: { lat, lng },
+        position: coords,
         map: map,
         title: item.project_name
       });
@@ -57,10 +63,7 @@ function generateSidebarMenu(groupedData) {
     const list = $('<ul></ul>');
     groupedData[state].forEach(item => {
       const li = $(`<li>${item.id}</li>`);
-      li.on('click', () => {
-        showPanel(item);
-        $('#sidebar').removeClass('open');
-      });
+      li.on('click', () => showPanel(item));
       list.append(li);
     });
     section.append(list);
@@ -73,14 +76,11 @@ function generateSidebarMenu(groupedData) {
 }
 
 function showPanel(data) {
-  const panel = document.getElementById("infoPanel");
   const content = document.getElementById("panelContent");
-  panel.classList.add("open");
-
   const imageCarousel = createCarousel(data);
 
   content.innerHTML = `
-    <h4>${data.project_name}</h4>
+    <h5 class="mt-3">${data.project_name}</h5>
     <p><strong>Location/Type:</strong> ${data.location_type}</p>
     <p><strong>City:</strong> ${data.city}, ${data.state}</p>
     <p><strong>Aboriginal City:</strong> ${data.aboriginal_city}</p>
@@ -92,10 +92,6 @@ function showPanel(data) {
     <p><a href="${data.links}" target="_blank">More Info</a></p>
     ${imageCarousel}
   `;
-
-  document.getElementById("closePanel").onclick = () => {
-    panel.classList.remove("open");
-  };
 }
 
 function createCarousel(data) {
