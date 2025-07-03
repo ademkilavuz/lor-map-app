@@ -1,5 +1,5 @@
 let map;
-let offsetMap = {}; // track offset per city
+let offsetMap = {};
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -9,18 +9,24 @@ function initMap() {
   });
 
   $.getJSON("lor_map_data.json", function (data) {
-    data.forEach((item) => {
+    const grouped = {};
+
+    data.forEach(item => {
+      // Group by state
+      if (!grouped[item.state]) grouped[item.state] = [];
+      grouped[item.state].push(item);
+
+      // Offset logic to avoid overlapping pins
       const cityKey = `${item.city}_${item.state}`;
       if (!offsetMap[cityKey]) offsetMap[cityKey] = 0;
 
-      const latBase = -25 + Math.random(); // Placeholder — ideally use real lat/lng
-      const lngBase = 133 + Math.random();
-
+      const baseLat = -25 + Math.random();
+      const baseLng = 133 + Math.random();
       const offset = offsetMap[cityKey] * 0.02;
       offsetMap[cityKey]++;
 
-      const lat = latBase + offset;
-      const lng = lngBase + offset;
+      const lat = baseLat + offset;
+      const lng = baseLng + offset;
 
       const marker = new google.maps.Marker({
         position: { lat, lng },
@@ -34,11 +40,35 @@ function initMap() {
 
       marker.addListener("mouseover", () => infowindow.open(map, marker));
       marker.addListener("mouseout", () => infowindow.close());
-
-      marker.addListener("click", () => {
-        showPanel(item);
-      });
+      marker.addListener("click", () => showPanel(item));
     });
+
+    generateSidebarMenu(grouped);
+  });
+}
+
+function generateSidebarMenu(groupedData) {
+  const container = $('#menuContent');
+  container.empty();
+
+  for (const state in groupedData) {
+    const section = $('<div class="state-section"></div>');
+    section.append(`<div class="state-header">${state}</div>`);
+    const list = $('<ul></ul>');
+    groupedData[state].forEach(item => {
+      const li = $(`<li>${item.id}</li>`);
+      li.on('click', () => {
+        showPanel(item);
+        $('#sidebar').removeClass('open');
+      });
+      list.append(li);
+    });
+    section.append(list);
+    container.append(section);
+  }
+
+  $('#menuToggle').on('click', () => {
+    $('#sidebar').toggleClass('open');
   });
 }
 
@@ -85,7 +115,7 @@ function createCarousel(data) {
   ).join('');
 
   return `
-    <div id="carousel${data.id}" class="carousel slide" data-bs-ride="carousel">
+    <div id="carousel${data.id}" class="carousel slide mt-3" data-bs-ride="carousel">
       <div class="carousel-indicators">${indicators}</div>
       <div class="carousel-inner">${items}</div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carousel${data.id}" data-bs-slide="prev">

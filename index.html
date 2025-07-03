@@ -8,14 +8,18 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <div id="map" class="col-12"></div>
-    </div>
-    <div id="infoPanel" class="info-panel">
-      <button id="closePanel" class="btn btn-light close-btn">&times;</button>
-      <div id="panelContent"></div>
-    </div>
+  <div class="sidebar-toggle" id="menuToggle">&#9776;</div>
+
+  <div id="sidebar" class="sidebar-menu">
+    <h5 class="mt-3 text-center">Project List</h5>
+    <div id="menuContent"></div>
+  </div>
+
+  <div id="map" class="map-container"></div>
+
+  <div id="infoPanel" class="info-panel">
+    <button id="closePanel" class="btn btn-light close-btn">&times;</button>
+    <div id="panelContent"></div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
