@@ -1,5 +1,4 @@
 let map;
-const offsetMap = {}; // To spread pins slightly in same city
 
 const cityCoordinates = {
   "Sydney": { lat: -33.8688, lng: 151.2093 },
@@ -22,30 +21,44 @@ function initMap() {
 
   $.getJSON("lor_map_data.json", function (data) {
     const grouped = {};
+    const cityGroups = {};
 
     data.forEach(item => {
+      // Group for sidebar
       if (!grouped[item.state]) grouped[item.state] = [];
       grouped[item.state].push(item);
 
-      const base = cityCoordinates[item.city] || { lat: -25 + Math.random(), lng: 133 + Math.random() };
+      // Group for circular marker layout
       const key = `${item.city}_${item.state}`;
-      if (!offsetMap[key]) offsetMap[key] = 0;
+      if (!cityGroups[key]) cityGroups[key] = [];
+      cityGroups[key].push(item);
+    });
 
-      const offsetFactor = 0.03;
-      const lat = base.lat + offsetMap[key] * offsetFactor;
-      const lng = base.lng + offsetMap[key] * offsetFactor;
-      offsetMap[key]++;
+    // Circular pin placement per city
+    Object.entries(cityGroups).forEach(([key, items]) => {
+      const [city] = key.split('_');
+      const base = cityCoordinates[city] || { lat: -25 + Math.random(), lng: 133 + Math.random() };
 
-      const marker = new google.maps.Marker({
-        position: { lat, lng },
-        map: map,
-        title: item.project_name || item.id
-      });
+      const radius = 0.08; // spread in degrees
+      const angleStep = (2 * Math.PI) / items.length;
 
-      marker.addListener("click", () => {
-        showPanel(item);
-        $('#menuSection').addClass('d-none');
-        $('#panelContent').removeClass('d-none');
+      items.forEach((item, index) => {
+        const angle = index * angleStep;
+        const lat = base.lat + radius * Math.cos(angle);
+        const lng = base.lng + radius * Math.sin(angle);
+
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          title: item.project_name || item.id
+        });
+
+        marker.addListener("click", () => {
+          showPanel(item);
+          $('#menuSection').addClass('d-none');
+          $('#panelContent').removeClass('d-none');
+          $('#sidebar').addClass('open');
+        });
       });
     });
 
