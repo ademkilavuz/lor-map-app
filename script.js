@@ -17,7 +17,7 @@ const cityCoordinates = {
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -25.2744, lng: 133.7751 },
-    zoom: 4,
+    zoom: 6,
     mapTypeControl: false
   });
 
