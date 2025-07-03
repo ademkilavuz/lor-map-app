@@ -1,6 +1,6 @@
 let map;
+const offsetMap = {}; // To spread pins slightly in same city
 
-// City coordinates used for pin placement
 const cityCoordinates = {
   "Sydney": { lat: -33.8688, lng: 151.2093 },
   "Melbourne": { lat: -37.8136, lng: 144.9631 },
@@ -24,29 +24,29 @@ function initMap() {
     const grouped = {};
 
     data.forEach(item => {
-      // Group by state
       if (!grouped[item.state]) grouped[item.state] = [];
       grouped[item.state].push(item);
 
-      // Use city coordinates or fallback
-      const coords = cityCoordinates[item.city] || {
-        lat: -25 + Math.random(),
-        lng: 133 + Math.random()
-      };
+      const base = cityCoordinates[item.city] || { lat: -25 + Math.random(), lng: 133 + Math.random() };
+      const key = `${item.city}_${item.state}`;
+      if (!offsetMap[key]) offsetMap[key] = 0;
+
+      const offsetFactor = 0.03;
+      const lat = base.lat + offsetMap[key] * offsetFactor;
+      const lng = base.lng + offsetMap[key] * offsetFactor;
+      offsetMap[key]++;
 
       const marker = new google.maps.Marker({
-        position: coords,
+        position: { lat, lng },
         map: map,
-        title: item.project_name
+        title: item.project_name || item.id
       });
 
-      const infowindow = new google.maps.InfoWindow({
-        content: item.project_name
+      marker.addListener("click", () => {
+        showPanel(item);
+        $('#menuSection').addClass('d-none');
+        $('#panelContent').removeClass('d-none');
       });
-
-      marker.addListener("mouseover", () => infowindow.open(map, marker));
-      marker.addListener("mouseout", () => infowindow.close());
-      marker.addListener("click", () => showPanel(item));
     });
 
     generateSidebarMenu(grouped);
@@ -62,8 +62,14 @@ function generateSidebarMenu(groupedData) {
     section.append(`<div class="state-header">${state}</div>`);
     const list = $('<ul></ul>');
     groupedData[state].forEach(item => {
-      const li = $(`<li>${item.id}</li>`);
-      li.on('click', () => showPanel(item));
+      const label = item.project_name && item.project_name.trim() !== "" ? item.project_name : item.id;
+      const li = $(`<li>${label}</li>`);
+      li.on('click', () => {
+        showPanel(item);
+        $('#menuSection').addClass('d-none');
+        $('#panelContent').removeClass('d-none');
+        $('#sidebar').addClass('open');
+      });
       list.append(li);
     });
     section.append(list);
@@ -73,14 +79,21 @@ function generateSidebarMenu(groupedData) {
   $('#menuToggle').on('click', () => {
     $('#sidebar').toggleClass('open');
   });
+
+  $('#returnButton').on('click', () => {
+    $('#menuSection').removeClass('d-none');
+    $('#panelContent').addClass('d-none');
+  });
 }
 
 function showPanel(data) {
   const content = document.getElementById("panelContent");
+
   const imageCarousel = createCarousel(data);
 
   content.innerHTML = `
-    <h5 class="mt-3">${data.project_name}</h5>
+    <button id="returnButton" class="btn btn-outline-secondary mb-3">← Back</button>
+    <h5 class="mt-3">${data.project_name || data.id}</h5>
     <p><strong>Location/Type:</strong> ${data.location_type}</p>
     <p><strong>City:</strong> ${data.city}, ${data.state}</p>
     <p><strong>Aboriginal City:</strong> ${data.aboriginal_city}</p>
@@ -92,6 +105,11 @@ function showPanel(data) {
     <p><a href="${data.links}" target="_blank">More Info</a></p>
     ${imageCarousel}
   `;
+
+  $('#returnButton').on('click', () => {
+    $('#menuSection').removeClass('d-none');
+    $('#panelContent').addClass('d-none');
+  });
 }
 
 function createCarousel(data) {
@@ -101,7 +119,7 @@ function createCarousel(data) {
   if (imageList.length === 0) return '';
 
   const indicators = imageList.map((_, idx) =>
-    `<button type="button" data-bs-target="#carousel${data.id}" data-bs-slide-to="${idx}" ${idx === 0 ? 'class="active" aria-current="true"' : ''} aria-label="Slide ${idx+1}"></button>`
+    `<button type="button" data-bs-target="#carousel${data.id}" data-bs-slide-to="${idx}" ${idx === 0 ? 'class="active"' : ''}></button>`
   ).join('');
 
   const items = imageList.map((img, idx) =>

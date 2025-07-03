@@ -1,11 +1,9 @@
-/* General layout */
 body, html {
   height: 100%;
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* Header Bar */
 .top-header {
   height: 60px;
   background-color: #2d2d2d;
@@ -17,19 +15,27 @@ body, html {
   z-index: 1001;
   display: flex;
   align-items: center;
-  color: white;
 }
 
-/* Google Map */
+.top-header h4 {
+  flex-grow: 1;
+  text-align: center;
+  color: white;
+  margin: 0;
+}
+
+#menuToggle {
+  z-index: 1002;
+}
+
 .map-container {
   height: 100vh;
   width: 100%;
-  margin-top: 60px; /* push map below header */
+  margin-top: 60px;
   position: relative;
   z-index: 0;
 }
 
-/* Sidebar Menu (Left) */
 .sidebar-menu {
   position: fixed;
   top: 60px;
@@ -80,7 +86,6 @@ body, html {
   color: #333;
 }
 
-/* Carousel styles */
 .carousel-inner img {
   width: 100%;
   height: auto;
