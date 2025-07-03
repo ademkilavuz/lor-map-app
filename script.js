@@ -143,4 +143,38 @@ function showPanel(data) {
 
   $('#returnButton').on('click', () => {
     $('#menuSection').removeClass('d-none');
-    $('#
+    $('#panelContent').addClass('d-none');
+  });
+}
+
+function createCarousel(data) {
+  if (!data.images || data.images.trim() === '') return '';
+  const folderPath = `visuals/${data.state}/${data.id}`;
+  const imageList = data.images.split(',').map(img => img.trim()).filter(Boolean);
+  if (imageList.length === 0) return '';
+
+  const indicators = imageList.map((_, idx) =>
+    `<button type="button" data-bs-target="#carousel${data.id}" data-bs-slide-to="${idx}" ${idx === 0 ? 'class="active"' : ''}></button>`
+  ).join('');
+
+  const items = imageList.map((img, idx) =>
+    `<div class="carousel-item ${idx === 0 ? 'active' : ''}">
+      <img src="${folderPath}/${img}" class="d-block w-100" alt="Slide ${idx+1}" />
+    </div>`
+  ).join('');
+
+  return `
+    <div id="carousel${data.id}" class="carousel slide mt-3" data-bs-ride="carousel">
+      <div class="carousel-indicators">${indicators}</div>
+      <div class="carousel-inner">${items}</div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carousel${data.id}" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carousel${data.id}" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  `;
+}
