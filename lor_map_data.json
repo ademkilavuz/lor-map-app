@@ -1,7 +1,7 @@
 [
   {
     "id": "art_id_1",
-    "state": "NSW",
+    "state": "NSW ",
     "city": "Sydney",
     "aboriginal_city": "Pymble / Cammeraigal",
     "project_name": "Reconcilaition Action Plan - 2017 ",
@@ -17,7 +17,7 @@
   },
   {
     "id": "art_id_2",
-    "state": "NSW ",
+    "state": "NSW",
     "city": "Sydney",
     "aboriginal_city": "Pymble / Cammeraigal",
     "project_name": "Laing O'Rourke Corporate",
@@ -33,7 +33,7 @@
   },
   {
     "id": "art_id_3",
-    "state": "NSW ",
+    "state": "NSW",
     "city": "Sydney",
     "aboriginal_city": "Pymble / Cammeraigal",
     "project_name": "TAP3 ",

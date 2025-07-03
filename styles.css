@@ -17,15 +17,8 @@ body, html {
   align-items: center;
 }
 
-.top-header h4 {
-  flex-grow: 1;
-  text-align: center;
-  color: white;
-  margin: 0;
-}
-
-#menuToggle {
-  z-index: 1002;
+.top-header input {
+  width: 250px;
 }
 
 .map-container {

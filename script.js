@@ -1,4 +1,6 @@
 let map;
+let fullData = [];
+let filteredData = [];
 
 const cityCoordinates = {
   "Sydney": { lat: -33.8688, lng: 151.2093 },
@@ -20,61 +22,79 @@ function initMap() {
   });
 
   $.getJSON("lor_map_data.json", function (data) {
-    const grouped = {};
-    const cityGroups = {};
+    fullData = data;
+    filteredData = data;
+    placeMarkers(data);
+    updateSidebarList(data);
+  });
 
-    data.forEach(item => {
-      // Group for sidebar
-      if (!grouped[item.state]) grouped[item.state] = [];
-      grouped[item.state].push(item);
+  $('#menuToggle').on('click', () => {
+    $('#sidebar').toggleClass('open');
+  });
 
-      // Group for circular marker layout
-      const key = `${item.city}_${item.state}`;
-      if (!cityGroups[key]) cityGroups[key] = [];
-      cityGroups[key].push(item);
-    });
-
-    // Circular pin placement per city
-    Object.entries(cityGroups).forEach(([key, items]) => {
-      const [city] = key.split('_');
-      const base = cityCoordinates[city] || { lat: -25 + Math.random(), lng: 133 + Math.random() };
-
-      const radius = 0.08; // spread in degrees
-      const angleStep = (2 * Math.PI) / items.length;
-
-      items.forEach((item, index) => {
-        const angle = index * angleStep;
-        const lat = base.lat + radius * Math.cos(angle);
-        const lng = base.lng + radius * Math.sin(angle);
-
-        const marker = new google.maps.Marker({
-          position: { lat, lng },
-          map: map,
-          title: item.project_name || item.id
-        });
-
-        marker.addListener("click", () => {
-          showPanel(item);
-          $('#menuSection').addClass('d-none');
-          $('#panelContent').removeClass('d-none');
-          $('#sidebar').addClass('open');
-        });
-      });
-    });
-
-    generateSidebarMenu(grouped);
+  $('#searchInput').on('input', function () {
+    const search = $(this).val().toLowerCase();
+    filteredData = fullData.filter(item =>
+      Object.values(item).some(val =>
+        String(val).toLowerCase().includes(search)
+      )
+    );
+    updateSidebarList(filteredData);
   });
 }
 
-function generateSidebarMenu(groupedData) {
+function placeMarkers(data) {
+  const cityGroups = {};
+
+  data.forEach(item => {
+    const key = `${item.city}_${item.state}`;
+    if (!cityGroups[key]) cityGroups[key] = [];
+    cityGroups[key].push(item);
+  });
+
+  Object.entries(cityGroups).forEach(([key, items]) => {
+    const [city] = key.split('_');
+    const base = cityCoordinates[city] || { lat: -25 + Math.random(), lng: 133 + Math.random() };
+
+    const radius = 0.08;
+    const angleStep = (2 * Math.PI) / items.length;
+
+    items.forEach((item, index) => {
+      const angle = index * angleStep;
+      const lat = base.lat + radius * Math.cos(angle);
+      const lng = base.lng + radius * Math.sin(angle);
+
+      const marker = new google.maps.Marker({
+        position: { lat, lng },
+        map: map,
+        title: item.project_name || item.id
+      });
+
+      marker.addListener("click", () => {
+        showPanel(item);
+        $('#menuSection').addClass('d-none');
+        $('#panelContent').removeClass('d-none');
+        $('#sidebar').addClass('open');
+      });
+    });
+  });
+}
+
+function updateSidebarList(data) {
   const container = $('#menuContent');
   container.empty();
 
-  for (const state in groupedData) {
+  const grouped = {};
+  data.forEach(item => {
+    if (!grouped[item.state]) grouped[item.state] = [];
+    grouped[item.state].push(item);
+  });
+
+  for (const state in grouped) {
     const section = $('<div class="state-section"></div>');
     section.append(`<div class="state-header">${state}</div>`);
     const list = $('<ul></ul>');
-    groupedData[state].forEach(item => {
+    grouped[state].forEach(item => {
       const label = item.project_name && item.project_name.trim() !== "" ? item.project_name : item.id;
       const li = $(`<li>${label}</li>`);
       li.on('click', () => {
@@ -89,10 +109,6 @@ function generateSidebarMenu(groupedData) {
     container.append(section);
   }
 
-  $('#menuToggle').on('click', () => {
-    $('#sidebar').toggleClass('open');
-  });
-
   $('#returnButton').on('click', () => {
     $('#menuSection').removeClass('d-none');
     $('#panelContent').addClass('d-none');
@@ -101,7 +117,6 @@ function generateSidebarMenu(groupedData) {
 
 function showPanel(data) {
   const content = document.getElementById("panelContent");
-
   const imageCarousel = createCarousel(data);
 
   content.innerHTML = `
