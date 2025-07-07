@@ -80,10 +80,21 @@ body, html {
   color: #333;
 }
 
+.carousel {
+  margin-bottom: 1rem;
+}
+
+.carousel-inner {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .carousel-inner img {
+  max-height: 300px;
   width: 100%;
-  height: auto;
-  border-radius: 8px;
+  object-fit: contain;
 }
 
 .carousel-control-prev-icon,
@@ -94,8 +105,4 @@ body, html {
 
 .carousel-indicators [data-bs-target] {
   background-color: #333;
-}
-
-.carousel {
-  margin-bottom: 1rem;
 }

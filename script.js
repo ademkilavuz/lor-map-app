@@ -12,7 +12,7 @@ function initMap() {
     mapTypeControl: false
   });
 
-  $.getJSON("lor_map_data.json", function (data) {
+  $.getJSON("lor_map_data_with_address.json", function (data) {
     fullData = data;
     geocodeAndPlaceMarkers(fullData);
     updateSidebarList(fullData);
@@ -37,8 +37,10 @@ function initMap() {
 }
 
 function geocodeAndPlaceMarkers(data) {
-  data.forEach((item, index) => {
-    const address = `${item.location_type}, ${item.city}, ${item.state}`;
+  data.forEach((item) => {
+    const address = item.address;
+    if (!address) return;
+
     geocoder.geocode({ address: address }, (results, status) => {
       if (status === "OK") {
         const location = results[0].geometry.location;
@@ -101,7 +103,23 @@ function updateSidebarList(data) {
 function panToMarker(id) {
   const found = markers.find(m => m.id === id);
   if (found) {
-    map.panTo(found.marker.getPosition());
+    const projection = map.getProjection();
+    const bounds = map.getBounds();
+    const center = found.marker.getPosition();
+
+    const scale = Math.pow(2, map.getZoom());
+    const offsetX = (map.getDiv().offsetWidth * 0.25) / scale;
+
+    const latLng = found.marker.getPosition();
+    const worldCoordinateCenter = projection.fromLatLngToPoint(latLng);
+    const pixelOffset = new google.maps.Point(offsetX, 0);
+    const worldCoordinateNewCenter = new google.maps.Point(
+      worldCoordinateCenter.x - pixelOffset.x,
+      worldCoordinateCenter.y
+    );
+    const newCenter = projection.fromPointToLatLng(worldCoordinateNewCenter);
+
+    map.panTo(newCenter);
     map.setZoom(12);
   }
 }
@@ -140,7 +158,7 @@ function createCarousel(data) {
 
   const items = data.images.map((img, idx) =>
     `<div class="carousel-item ${idx === 0 ? 'active' : ''}">
-      <img src="${img}" class="d-block w-100" alt="Slide ${idx + 1}" />
+      <img src="${img}" class="d-block" alt="Slide ${idx + 1}" />
     </div>`
   ).join('');
 
