@@ -158,7 +158,7 @@ function createCarousel(data) {
 
   const items = data.images.map((img, idx) =>
     `<div class="carousel-item ${idx === 0 ? 'active' : ''}">
-      <img src="${img}" class="d-block" alt="Slide ${idx + 1}" />
+      <img src="assets/${data.id}/${img}" class="d-block" alt="Slide ${idx + 1}" />
     </div>`
   ).join('');
 
