@@ -12,7 +12,7 @@ function initMap() {
     mapTypeControl: false
   });
 
-  $.getJSON("lor_map_data_with_address.json", function (data) {
+  $.getJSON("lor_map_data.json", function (data) {
     fullData = data;
     geocodeAndPlaceMarkers(fullData);
     updateSidebarList(fullData);
