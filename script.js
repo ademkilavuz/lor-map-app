@@ -131,16 +131,16 @@ function showPanel(data) {
   content.innerHTML = `
     <button id="returnButton" class="btn btn-outline-secondary mb-3">← Back</button>
     ${imageCarousel}
-    <h5 class="mt-3">${data.project_name || data.id}</h5>
+    <h5 class="mt-3">${data.project_name}</h5>
     <p><strong>Location/Type:</strong> ${data.location_type}</p>
     <p><strong>City:</strong> ${data.city}, ${data.state}</p>
-    <p><strong>Aboriginal City:</strong> ${data.aboriginal_city}</p>
+    <p><strong>Aboriginal City:</strong> ${data.aboriginalCity}</p>
     <p><strong>Artist:</strong> ${data.artist}</p>
-    <p><strong>Initiative:</strong> ${data.initiative_type}</p>
+    <p><strong>Initiative:</strong> ${data.initiative}</p>
     <p><strong>Description:</strong> ${data.description}</p>
-    <p><strong>Artist Bio:</strong> ${data.artist_bio}</p>
+    <p><strong>Artist Bio:</strong> ${data.artistBio}</p>
     <p><strong>Contact:</strong> ${data.contact}</p>
-    <p><a href="${data.links}" target="_blank">More Info</a></p>
+    <p><a href="${data.moreInfo}" target="_blank">More Info</a></p>
   `;
 
   $('#returnButton').on('click', () => {
