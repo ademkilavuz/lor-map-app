@@ -48,7 +48,7 @@ function geocodeAndPlaceMarkers(data) {
         const marker = new google.maps.Marker({
           map: map,
           position: location,
-          title: item.project_name || item.id
+          title: item.projectName || item.id
         });
 
         markers.push({ id: item.id, marker });
@@ -79,7 +79,7 @@ function updateSidebarList(data) {
     section.append(`<div class="state-header">${state}</div>`);
     const list = $('<ul></ul>');
     grouped[state].forEach(item => {
-      const label = item.project_name && item.project_name.trim() !== "" ? item.project_name : item.id;
+      const label = item.projectName && item.projectName.trim() !== "" ? item.projectName : item.id;
       const li = $(`<li>${label}</li>`);
       li.on('click', () => {
         showPanel(item);
