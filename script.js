@@ -79,7 +79,7 @@ function updateSidebarList(data) {
     section.append(`<div class="state-header">${state}</div>`);
     const list = $('<ul></ul>');
     grouped[state].forEach(item => {
-      const label = item.projectName && item.projectName.trim() !== "" ? item.projectName : item.id;
+      const label = item.projectName && item.projectName.trim() !== "" ? item.projectName + " - " + item.locationType : item.id;
       const li = $(`<li>${label}</li>`);
       li.on('click', () => {
         showPanel(item);
