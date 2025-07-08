@@ -156,12 +156,32 @@ function createCarousel(data) {
     `<button type="button" data-bs-target="#carousel${data.id}" data-bs-slide-to="${idx}" ${idx === 0 ? 'class="active"' : ''}></button>`
   ).join('');
 
-  const items = data.images.map((img, idx) =>
-    `<div class="carousel-item ${idx === 0 ? 'active' : ''}">
-      <img src="assets/${data.id}/${img}" class="d-block" alt="Slide ${idx + 1}" />
-    </div>`
-  ).join('');
+  const items = data.visuals.map((file, idx) => {
+  const fileType = file.split('.').pop().toLowerCase();
+  const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileType);
 
+  let content = '';
+
+  if (isImage) {
+    content = `<img src="${file}" class="d-block" alt="Slide ${idx + 1}" />`;
+  } else if (fileType === 'pdf') {
+    content = `
+      <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100%;">
+        <i class="bi bi-file-earmark-pdf" style="font-size: 48px; color: #d9534f;"></i>
+        <a href="${file}" target="_blank">View PDF</a>
+      </div>`;
+  } else if (fileType === 'pptx' || fileType === 'ppt') {
+    content = `
+      <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100%;">
+        <i class="bi bi-file-earmark-slides" style="font-size: 48px; color: #f0ad4e;"></i>
+        <a href="${file}" target="_blank">View PowerPoint</a>
+      </div>`;
+  } else {
+    content = `<p class="text-center">Unsupported file type: ${file}</p>`;
+  }
+
+  return `<div class="carousel-item ${idx === 0 ? 'active' : ''}">${content}</div>`;
+}).join('');
   return `
     <div id="carousel${data.id}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
       <div class="carousel-indicators">${indicators}</div>
