@@ -104,7 +104,6 @@ function panToMarker(id) {
   const found = markers.find(m => m.id === id);
   if (found) {
     const projection = map.getProjection();
-    const bounds = map.getBounds();
     const center = found.marker.getPosition();
 
     const scale = Math.pow(2, map.getZoom());
@@ -156,14 +155,29 @@ function createCarousel(data) {
     `<button type="button" data-bs-target="#carousel${data.id}" data-bs-slide-to="${idx}" ${idx === 0 ? 'class="active"' : ''}></button>`
   ).join('');
 
-  const items = data.images.map((img, idx) =>
-    `<div class="carousel-item ${idx === 0 ? 'active' : ''}">
-      <img src="assets/${data.id}/${img}" class="d-block" alt="Slide ${idx + 1}" />
-    </div>`
-  ).join('');
+  const items = data.images.map((file, idx) => {
+    const filePath = `assets/${data.id}/${file}`;
+    const ext = file.split('.').pop().toLowerCase();
+
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+      return `
+        <div class="carousel-item ${idx === 0 ? 'active' : ''}">
+          <img src="${filePath}" class="d-block" alt="Slide ${idx + 1}" />
+        </div>`;
+    } else {
+      return `
+        <div class="carousel-item ${idx === 0 ? 'active' : ''}">
+          <div class="p-4 text-center">
+            <i class="bi bi-file-earmark-arrow-down-fill" style="font-size: 3rem;"></i>
+            <p class="mt-2">${file}</p>
+            <a href="${filePath}" download class="btn btn-primary btn-sm">Download File</a>
+          </div>
+        </div>`;
+    }
+  }).join('');
 
   return `
-    <div id="carousel${data.id}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    <div id="carousel${data.id}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
       <div class="carousel-indicators">${indicators}</div>
       <div class="carousel-inner">${items}</div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carousel${data.id}" data-bs-slide="prev">
@@ -174,6 +188,5 @@ function createCarousel(data) {
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
-    </div>
-  `;
+    </div>`;
 }
