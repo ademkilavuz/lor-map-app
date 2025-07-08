@@ -91,6 +91,9 @@ body, html {
 
 .carousel {
   margin-bottom: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .carousel-inner {
@@ -98,6 +101,7 @@ body, html {
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: 100%;
 }
 
 .carousel-inner img {
@@ -106,6 +110,7 @@ body, html {
   max-width: 100%;
   object-fit: contain;
   margin: 0 auto;
+  display: block;
 }
 
 .carousel-control-prev-icon,
