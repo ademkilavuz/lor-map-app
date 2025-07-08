@@ -132,7 +132,7 @@ function showPanel(data) {
     <button id="returnButton" class="btn btn-outline-secondary mb-3">← Back</button>
     ${imageCarousel}
     <h5 class="mt-3">${data.project_name}</h5>
-    <p><strong>Location/Type:</strong> ${data.location_type}</p>
+    <p><strong>Location/Type:</strong> ${data.locationType}</p>
     <p><strong>City:</strong> ${data.city}, ${data.state}</p>
     <p><strong>Aboriginal City:</strong> ${data.aboriginalCity}</p>
     <p><strong>Artist:</strong> ${data.artist}</p>
