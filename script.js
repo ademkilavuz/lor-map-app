@@ -177,7 +177,7 @@ function createCarousel(data) {
   }).join('');
 
   return `
-    <div id="carousel${data.id}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+    <div id="carousel${data.id}" class="carousel slide" data-bs-ride="false">
       <div class="carousel-indicators">${indicators}</div>
       <div class="carousel-inner">${items}</div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carousel${data.id}" data-bs-slide="prev">
@@ -190,3 +190,4 @@ function createCarousel(data) {
       </button>
     </div>`;
 }
+
