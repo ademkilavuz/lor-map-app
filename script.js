@@ -1,4 +1,7 @@
 let selectedMarker = null;
+const dark_pin_icon = "http://maps.google.com/mapfiles/ms/icons/black-dot.png";
+const default_pin_icon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+
 
 let map;
 let fullData = [];
@@ -58,9 +61,9 @@ function geocodeAndPlaceMarkers(data) {
 
         marker.addListener("click", () => {
         if (selectedMarker && selectedMarker !== marker) {
-          selectedMarker.setIcon( + default_pin_icon + );
+          selectedMarker.setIcon(default_pin_icon);
         }
-        marker.setIcon( + dark_pin_icon + );
+        marker.setIcon(dark_pin_icon);
         selectedMarker = marker;
 
           showPanel(item);
