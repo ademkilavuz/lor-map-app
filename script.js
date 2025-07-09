@@ -177,7 +177,7 @@ function createCarousel(data) {
   ).join('');
 
   const items = data.images.map((file, idx) => {
-    const filePath = assets/${data.id}/${file};
+    const filePath = `assets/${data.id}/${file}`;
     const ext = file.split('.').pop().toLowerCase();
 
     if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
