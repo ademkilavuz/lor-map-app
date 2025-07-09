@@ -1,6 +1,4 @@
 let selectedMarker = null;
-const dark_pin_icon = "https://ademkilavuz.github.io/lor-map-app/assets/images/Red_pin.png";
-const default_pin_icon = "https://ademkilavuz.github.io/lor-map-app/assets/images/Yellow_pin.png";
 
 
 let map;
@@ -12,16 +10,9 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
 
   map = new google.maps.Map(document.getElementById("map"), {
-     center: { lat: -25.2744, lng: 133.7751 },
+  center: { lat: -25.2744, lng: 133.7751 },
     zoom: 4,
     mapTypeControl: false
-  });
-  
-   map.addListener("click", () => {
-    if (selectedMarker) {
-      selectedMarker.setIcon(default_pin_icon);
-      selectedMarker = null;
-    }
   });
 
   $.getJSON("lor_map_data.json", function (data) {
@@ -58,7 +49,7 @@ function geocodeAndPlaceMarkers(data) {
         const location = results[0].geometry.location;
 
         const marker = new google.maps.Marker({
-      icon: default_pin_icon,
+      icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
           map: map,
           position: location,
           title: item.projectName || item.id
@@ -67,9 +58,6 @@ function geocodeAndPlaceMarkers(data) {
         markers.push({ id: item.id, marker });
 
         marker.addListener("click", () => {
-        if (selectedMarker && selectedMarker !== marker) {
-          selectedMarker.setIcon(default_pin_icon);
-        }
         marker.setIcon(dark_pin_icon);
         selectedMarker = marker;
 
@@ -211,4 +199,7 @@ function createCarousel(data) {
       </button>
     </div>`;
 }
+
+
+
 
