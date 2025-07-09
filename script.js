@@ -12,17 +12,17 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
 
   map = new google.maps.Map(document.getElementById("map"), {
- 
-    center: { lat: -25.2744, lng: 133.7751 },
+     center: { lat: -25.2744, lng: 133.7751 },
     zoom: 4,
     mapTypeControl: false
   });
-  map.addListener("click", () => {
-  if (selectedMarker) {
-    selectedMarker.setIcon(default_pin_icon);
-    selectedMarker = null;
-  }
-});
+  
+   map.addListener("click", () => {
+    if (selectedMarker) {
+      selectedMarker.setIcon(default_pin_icon);
+      selectedMarker = null;
+    }
+  });
 
   $.getJSON("lor_map_data.json", function (data) {
     fullData = data;
@@ -58,7 +58,7 @@ function geocodeAndPlaceMarkers(data) {
         const location = results[0].geometry.location;
 
         const marker = new google.maps.Marker({
-      icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+      icon: default_pin_icon,
           map: map,
           position: location,
           title: item.projectName || item.id
@@ -211,8 +211,4 @@ function createCarousel(data) {
       </button>
     </div>`;
 }
-
-
-
-
 
