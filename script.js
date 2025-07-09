@@ -12,20 +12,17 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
 
   map = new google.maps.Map(document.getElementById("map"), {
-
-
-map.addListener("click", () => {
+ 
+    center: { lat: -25.2744, lng: 133.7751 },
+    zoom: 4,
+    mapTypeControl: false
+  });
+  map.addListener("click", () => {
   if (selectedMarker) {
     selectedMarker.setIcon(default_pin_icon);
     selectedMarker = null;
   }
 });
-
-  
-    center: { lat: -25.2744, lng: 133.7751 },
-    zoom: 4,
-    mapTypeControl: false
-  });
 
   $.getJSON("lor_map_data.json", function (data) {
     fullData = data;
