@@ -215,9 +215,4 @@ function createCarousel(data) {
 
 
 
-map.addListener("click", () => {
-  if (selectedMarker) {
-    selectedMarker.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
-    selectedMarker = null;
-  }
-});
+
