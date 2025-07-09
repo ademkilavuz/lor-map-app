@@ -1,6 +1,6 @@
 let selectedMarker = null;
-const dark_pin_icon = "http://maps.google.com/mapfiles/ms/icons/black-dot.png";
-const default_pin_icon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+const dark_pin_icon = "assets/Red_pin.png";
+const default_pin_icon = "assets/Yellow_pin.png";
 
 
 let map;
@@ -12,6 +12,13 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
 
   map = new google.maps.Map(document.getElementById("map"), {
+  map.addListener("click", () => {
+    if (selectedMarker) {
+      selectedMarker.setIcon(default_pin_icon);
+      selectedMarker = null;
+    }
+  });
+
     center: { lat: -25.2744, lng: 133.7751 },
     zoom: 4,
     mapTypeControl: false
