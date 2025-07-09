@@ -1,3 +1,5 @@
+let selectedMarker = null;
+
 let map;
 let fullData = [];
 let markers = [];
@@ -46,6 +48,7 @@ function geocodeAndPlaceMarkers(data) {
         const location = results[0].geometry.location;
 
         const marker = new google.maps.Marker({
+      icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
           map: map,
           position: location,
           title: item.projectName || item.id
@@ -54,6 +57,12 @@ function geocodeAndPlaceMarkers(data) {
         markers.push({ id: item.id, marker });
 
         marker.addListener("click", () => {
+        if (selectedMarker && selectedMarker !== marker) {
+          selectedMarker.setIcon( + default_pin_icon + );
+        }
+        marker.setIcon( + dark_pin_icon + );
+        selectedMarker = marker;
+
           showPanel(item);
           $('#menuSection').addClass('d-none');
           $('#panelContent').removeClass('d-none');
@@ -101,6 +110,7 @@ function updateSidebarList(data) {
 }
 
 function panToMarker(id) {
+  google.maps.event.addListenerOnce(map, 'idle', () => {
   const found = markers.find(m => m.id === id);
   if (found) {
     const projection = map.getProjection();
@@ -121,6 +131,7 @@ function panToMarker(id) {
     map.panTo(newCenter);
     map.setZoom(12);
   }
+  });
 }
 
 function showPanel(data) {
@@ -191,3 +202,12 @@ function createCarousel(data) {
     </div>`;
 }
 
+
+
+
+map.addListener("click", () => {
+  if (selectedMarker) {
+    selectedMarker.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+    selectedMarker = null;
+  }
+});
