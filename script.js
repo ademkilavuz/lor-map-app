@@ -95,7 +95,7 @@ function updateSidebarList(data) {
 
   for (const state in grouped) {
     const section = $('<div class="state-section"></div>');
-    section.append(<div class="state-header">${state}</div>);
+    section.append('<div class="state-header">${state}</div>');
     const list = $('<ul></ul>');
     grouped[state].forEach(item => {
       const label = item.projectName && item.projectName.trim() !== "" ? item.projectName + " - " + item.locationType : item.id;
