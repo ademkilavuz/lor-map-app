@@ -100,10 +100,15 @@ function updateSidebarList(data) {
       const label = item.projectName && item.projectName.trim() !== "" ? item.projectName + " - " + item.locationType : item.id;
       const li = $(`<li>${label}</li>`);
       li.on('click', () => {
-        if (selectedMarker) {
-          selectedMarker.setIcon(default_pin_icon);
-          selectedMarker = null;
+        const found = markers.find(m => m.id === item.id);
+        if (found) {
+          if (selectedMarker && selectedMarker !== found.marker) {
+            selectedMarker.setIcon(default_pin_icon);
+          }
+          found.marker.setIcon(dark_pin_icon);
+          selectedMarker = found.marker;
         }
+
         showPanel(item);
         $('#menuSection').addClass('d-none');
         $('#panelContent').removeClass('d-none');
@@ -128,10 +133,6 @@ function updateSidebarList(data) {
 
 function panToMarker(id) {
   google.maps.event.addListenerOnce(map, 'idle', () => {
-    if (selectedMarker) {
-      selectedMarker.setIcon(default_pin_icon);
-      selectedMarker = null;
-    }
     const found = markers.find(m => m.id === id);
     if (found) {
       const projection = map.getProjection();
