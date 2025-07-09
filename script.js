@@ -172,7 +172,8 @@ function showPanel(data) {
     <p><strong>Description:</strong> ${data.description}</p>
     <p><strong>Artist Bio:</strong> ${data.artistBio}</p>
     <p><strong>Contact:</strong> ${data.contact}</p>
-    <p><a href="${data.moreInfo}" target="_blank">More Info</a></p>
+    ${data.moreInfo && data.moreInfo !== "NaN" ? '<p><a href="${data.moreInfo}" target="_blank">More Info</a></p>' : ""}
+
   `;
 
   $('#returnButton').on('click', () => {
