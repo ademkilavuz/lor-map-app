@@ -1,6 +1,3 @@
-let selectedMarker = null;
-
-
 let map;
 let fullData = [];
 let markers = [];
@@ -10,7 +7,7 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
 
   map = new google.maps.Map(document.getElementById("map"), {
-  center: { lat: -25.2744, lng: 133.7751 },
+    center: { lat: -25.2744, lng: 133.7751 },
     zoom: 4,
     mapTypeControl: false
   });
@@ -49,7 +46,6 @@ function geocodeAndPlaceMarkers(data) {
         const location = results[0].geometry.location;
 
         const marker = new google.maps.Marker({
-      icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
           map: map,
           position: location,
           title: item.projectName || item.id
@@ -58,9 +54,6 @@ function geocodeAndPlaceMarkers(data) {
         markers.push({ id: item.id, marker });
 
         marker.addListener("click", () => {
-        marker.setIcon(dark_pin_icon);
-        selectedMarker = marker;
-
           showPanel(item);
           $('#menuSection').addClass('d-none');
           $('#panelContent').removeClass('d-none');
@@ -108,7 +101,6 @@ function updateSidebarList(data) {
 }
 
 function panToMarker(id) {
-  google.maps.event.addListenerOnce(map, 'idle', () => {
   const found = markers.find(m => m.id === id);
   if (found) {
     const projection = map.getProjection();
@@ -129,7 +121,6 @@ function panToMarker(id) {
     map.panTo(newCenter);
     map.setZoom(12);
   }
-  });
 }
 
 function showPanel(data) {
@@ -199,7 +190,4 @@ function createCarousel(data) {
       </button>
     </div>`;
 }
-
-
-
 
