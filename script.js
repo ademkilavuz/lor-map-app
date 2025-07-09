@@ -1,6 +1,6 @@
 let selectedMarker = null;
-const dark_pin_icon = "assets/Red_pin.png";
-const default_pin_icon = "assets/Yellow_pin.png";
+const dark_pin_icon = "assets/images/Red_pin.png";
+const default_pin_icon = "assets/images/Yellow_pin.png";
 
 
 let map;
