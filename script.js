@@ -173,7 +173,7 @@ function createCarousel(data) {
   if (!data.images || data.images.length === 0) return '';
 
   const indicators = data.images.map((_, idx) =>
-   ` <button type="button" data-bs-target="#carousel${data.id}" data-bs-slide-to="${idx}" ${idx === 0 ? 'class="active"' : ''}></button>`
+    `<button type="button" data-bs-target="#carousel${data.id}" data-bs-slide-to="${idx}" ${idx === 0 ? 'class="active"' : ''}></button>`
   ).join('');
 
   const items = data.images.map((file, idx) => {
@@ -181,8 +181,8 @@ function createCarousel(data) {
     const ext = file.split('.').pop().toLowerCase();
 
     if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
-      return 
-       ` <div class="carousel-item ${idx === 0 ? 'active' : ''}">
+      return `
+        <div class="carousel-item ${idx === 0 ? 'active' : ''}">
           <img src="${filePath}" class="d-block" alt="Slide ${idx + 1}" />
         </div>`;
     } else {
@@ -197,8 +197,8 @@ function createCarousel(data) {
     }
   }).join('');
 
-  return 
-   ` <div id="carousel${data.id}" class="carousel slide" data-bs-ride="false">
+  return `
+    <div id="carousel${data.id}" class="carousel slide" data-bs-ride="false">
       <div class="carousel-indicators">${indicators}</div>
       <div class="carousel-inner">${items}</div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carousel${data.id}" data-bs-slide="prev">
