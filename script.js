@@ -19,6 +19,7 @@ function initMap() {
   map.addListener("click", () => {
     if (selectedMarker) {
       selectedMarker.setIcon(default_pin_icon);
+      selectedMarker.setZIndex(undefined);
       selectedMarker = null;
     }
   });
@@ -68,6 +69,7 @@ function geocodeAndPlaceMarkers(data) {
         marker.addListener("click", () => {
           if (selectedMarker && selectedMarker !== marker) {
             selectedMarker.setIcon(default_pin_icon);
+            selectedMarker.setZIndex(undefined);
           }
           marker.setIcon(dark_pin_icon);
           marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
@@ -108,6 +110,7 @@ function updateSidebarList(data) {
             selectedMarker.setZIndex(undefined);
           }
           found.marker.setIcon(dark_pin_icon);
+          found.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
           selectedMarker = found.marker;
         }
 
@@ -126,6 +129,7 @@ function updateSidebarList(data) {
   $('#returnButton').on('click', () => {
     if (selectedMarker) {
       selectedMarker.setIcon(default_pin_icon);
+      selectedMarker.setZIndex(undefined);
       selectedMarker = null;
     }
     $('#menuSection').removeClass('d-none');
@@ -138,12 +142,11 @@ function panToMarker(id) {
     const found = markers.find(m => m.id === id);
     if (found) {
       const projection = map.getProjection();
-      const center = found.marker.getPosition();
+      const latLng = found.marker.getPosition();
 
       const scale = Math.pow(2, map.getZoom());
       const offsetX = (map.getDiv().offsetWidth * 0.25) / scale;
 
-      const latLng = found.marker.getPosition();
       const worldCoordinateCenter = projection.fromLatLngToPoint(latLng);
       const pixelOffset = new google.maps.Point(offsetX, 0);
       const worldCoordinateNewCenter = new google.maps.Point(
@@ -174,13 +177,13 @@ function showPanel(data) {
     <p><strong>Description:</strong> ${data.description}</p>
     <p><strong>Artist Bio:</strong> ${data.artistBio}</p>
     <p><strong>Contact:</strong> ${data.contact}</p>
-    ${data.moreInfo && data.moreInfo !== "NaN" ? '<p><a href="${data.moreInfo}" target="_blank">More Info</a></p>' : ""}
-
+    ${data.moreInfo && data.moreInfo !== "NaN" ? `<p><a href="${data.moreInfo}" target="_blank">More Info</a></p>` : ""}
   `;
 
   $('#returnButton').on('click', () => {
     if (selectedMarker) {
       selectedMarker.setIcon(default_pin_icon);
+      selectedMarker.setZIndex(undefined);
       selectedMarker = null;
     }
     $('#menuSection').removeClass('d-none');
