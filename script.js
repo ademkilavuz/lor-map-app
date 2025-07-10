@@ -70,6 +70,7 @@ function geocodeAndPlaceMarkers(data) {
             selectedMarker.setIcon(default_pin_icon);
           }
           marker.setIcon(dark_pin_icon);
+          marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
           selectedMarker = marker;
 
           showPanel(item);
@@ -104,6 +105,7 @@ function updateSidebarList(data) {
         if (found) {
           if (selectedMarker && selectedMarker !== found.marker) {
             selectedMarker.setIcon(default_pin_icon);
+            selectedMarker.setZIndex(undefined);
           }
           found.marker.setIcon(dark_pin_icon);
           selectedMarker = found.marker;
